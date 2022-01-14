@@ -1,0 +1,9 @@
+{
+  "name": "signalcorrelation",
+  "version": "1.0.0",
+  "dependencies": {
+    "chart.js": "^3.7.0",
+    "chartjs-plugin-datalabels": "^2.0.0",
+    "jquery": "^3.6.0"
+  }
+}
