@@ -2,6 +2,67 @@ class SignalUtils {
     constructor() {
     }
 
+    static calculateAutoCorrelation(sentSignal, receivedSignal, measurement) {
+        let [senderValues, receiverValues] = [[], []];
+        [senderValues, receiverValues] = SignalUtils.getSentAndReceivedData(sentSignal, receivedSignal, measurement);
+
+        let akf = new Array(senderValues.length).fill(0);
+        let times = new Array(akf.length);
+
+        for (let i = 0; i < akf.length; i++) {
+            for (let t = 0; t < akf.length; t++) {
+                akf[i] += senderValues[t] * receiverValues[(t + i) % akf.length];
+            }
+
+            times[i] = i;
+        }
+
+        return [akf, times];
+    }
+
+    static calculateAutoCorrelationNormed(sentSignal, receivedSignal, measurement) {
+        let [senderValues, receiverValues] = [[], []];
+        [senderValues, receiverValues] = SignalUtils.getSentAndReceivedData(sentSignal, receivedSignal, measurement);
+
+        let [akf, times] = [[], []];
+        [akf, times] = SignalUtils.calculateAutoCorrelation(senderValues, receiverValues, measurement);
+
+        let normedAkf = [];
+        for (let akfVal of akf) {
+            normedAkf.push(akfVal / Math.sqrt(
+                SignalUtils.calculatePoweredSum(senderValues, 2)
+                * SignalUtils.calculatePoweredSum(receiverValues, 2)
+            ));
+        }
+
+        return [normedAkf, times];
+    }
+
+    static calculatePoweredSum(data, power) {
+        let squaredSum = 0;
+
+        for (let element of data) {
+            squaredSum += Math.pow(element, power);
+        }
+
+        return squaredSum;
+    }
+
+    static getSentAndReceivedData(sentSignal, receivedSignal, measurement) {
+        let senderValues = sentSignal;
+        let receiverValues = receivedSignal;
+
+        if (!Array.isArray(sentSignal)) {
+            senderValues = sentSignal.getSamplePoints(measurement)[0];
+        }
+
+        if (!Array.isArray(receivedSignal)) {
+            receiverValues = receivedSignal.getSamplePoints(measurement)[0];
+        }
+
+        return [senderValues, receiverValues];
+    }
+
     static measure(measurement, getValueFunction, refObject) {
         let retValues = [];
         let retTimes = [];
@@ -9,6 +70,10 @@ class SignalUtils {
         //Counts up milliseconds
         for (let i = 0; i <= measurement.measureTimeMs; i += measurement.sampleIntervalMs) {
             let currentValue = getValueFunction(i, refObject);
+
+            if (!Number.isInteger(currentValue)) {
+                currentValue = parseInt(currentValue)
+            }
 
             retValues.push(currentValue);
             retTimes.push(i);
@@ -20,10 +85,36 @@ class SignalUtils {
     }
 
     static findPeriod(data, toleranceSpan, everyNthCheck) {
-        return SignalUtils.findIndexWhereNumDrops(data, toleranceSpan, everyNthCheck, 3, true);
+        let numSpikes = 3;
+        if (data[0] > toleranceSpan) {
+            numSpikes = 2;
+        }
+
+        return SignalUtils.findIndexWhereSpike(data, toleranceSpan, everyNthCheck, numSpikes, true);
     }
 
-    static findIndexWhereNumDrops(data, toleranceSpan, everyNthCheck, numDrops, showValueWhenHigh) {
+    static findAllPeakIndexes(data) {
+        let peakIndexes = [];
+
+        data.every(function (element, index) {
+            if (index+1 > data.length) {
+                if (element > data[index-1]) {
+                    peakIndexes.push(index);
+                }
+                return true;
+            }
+
+            if (data[index - 1] < element && element >= data[index+1]) {
+                peakIndexes.push(index);
+            }
+
+            return true;
+        });
+
+        return peakIndexes;
+    }
+
+    static findIndexWhereSpike(data, toleranceSpan, everyNthCheck, numSpikes, showValueWhenHigh) {
         let changeCount = 0, previousValue = data[0];
         let retIndex = null;
 
@@ -40,7 +131,7 @@ class SignalUtils {
 
             previousValue = element;
 
-            if (changeCount === numDrops) {
+            if (changeCount === numSpikes) {
                 retIndex = index;
 
                 return false;   // =break;
