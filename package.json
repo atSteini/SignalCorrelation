@@ -2,8 +2,10 @@
   "name": "signalcorrelation",
   "version": "1.0.0",
   "dependencies": {
+    "canvas-to-blob": "^1.0.0",
     "chart.js": "^3.7.0",
     "chartjs-plugin-datalabels": "^2.0.0",
+    "file-saver": "^2.0.5",
     "jquery": "^3.6.0"
   }
 }
