@@ -6,6 +6,9 @@ class RectangleSignal {
         this.dutyCycle = onTimePercent / 100.0;   // % / 100
         this.initialValue = true; //starting Low (false) or High (true)
 
+        this.onTimeMs = periodMs * (onTimePercent / 100);
+        this.offTimeMs = periodMs * (1 - (onTimePercent / 100));
+
         this.values = null;
     }
 
@@ -43,6 +46,22 @@ class RectangleSignal {
         }
 
         return flag ? refObject.high : refObject.low;
+    }
+
+    static generateFromStudent3(student) {
+        let amplitudeHigh = parseInt(student.katNr);
+        let amplitudeLow = 0;
+
+        let onTimeMs = 100 + 2 * student.katNr;
+        let offTimeMs = 2 * onTimeMs;
+
+        let onTimePercent = (onTimeMs / (onTimeMs + offTimeMs)) * 100;
+
+        return new RectangleSignal(
+            onTimeMs + offTimeMs,  //ms
+            amplitudeLow,   //V
+            amplitudeHigh,  //V
+            onTimePercent);
     }
 
     static generateFromStudent(student, symmetric, onTimePercent) {

@@ -27,66 +27,22 @@
     <script src="../node_modules/chart.js/dist/chart.js"></script>
     <script src="../node_modules/chart.js/auto/auto.js"></script>
     <script src="../node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js"></script>
+    <script src="../node_modules/canvas-to-blob/index.js"></script>
+    <script src="../node_modules/file-saver/dist/FileSaver.min.js"></script>
 </head>
 
 <body>
     <div class="defaultContainer mt-3">
         <h3 class="h3 text-center">
-            <span id="title">Title</span><br>
-            <small id="subtitle" class="text-muted">Subtitle</small>
+            <span id="title">Projekt Signalkorrelation</span><br>
+            <small id="subtitle" class="text-muted">Startseite</small>
         </h3>
     </div>
 
-    <div class="defaultContainer">
-        <button type="button" class="btn btn-outline-primary center-horizontal mt-3 mb-3" id="settingsCollapse">Toggle Settings</button>
-
-        <div id="settings_container" class="text-center defaultChart">
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input class="form-control" id="name" type="text" value="Florian Steinkellner">
-            </div>
-
-            <div class="mb-3">
-                <label for="katNr" class="form-label">Katalognummer</label>
-                <input class="form-control" id="katNr" type="number" value="19">
-            </div>
-
-            <div class="mb-3">
-                <label for="sampleTimeMs" class="form-label">Sample Time [ms]</label>
-                <input class="form-control" id="sampleTimeMs" type="number" value="50">
-            </div>
-
-            <div class="mb-3">
-                <label for="liveReload" class="form-label">Live Reload</label>
-                <input class="form-check-inline" type="checkbox" id="liveReload" checked>
-            </div>
-
-            <div class="mb-3">
-                <label for="enableLog" class="form-label">Logging</label>
-                <input class="form-check-inline" type="checkbox" id="enableLog" checked>
-            </div>
-
-            <div class="mb-3">
-                <label for="logDefaults" class="form-label">Log defaults</label>
-                <input class="form-check-inline" type="checkbox" id="logDefaults" checked>
-            </div>
-
-            <div class="mb-3">
-                <button id="btnUpdate" class="btn btn-primary" type="button">Update</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="pulseSignalSenderContainer" class="defaultContainer">
-        <div id="pulseSignalSenderInner" class="defaultChart">
-            <canvas id="pulseSignalSender"></canvas>
-        </div>
-    </div>
-
-    <div id="pulseSignalReceiverContainer" class="defaultContainer">
-        <div id="pulseSignalReceiverInner" class="defaultChart">
-            <canvas id="pulseSignalReceiver"></canvas>
-        </div>
+    <div class="defaultContainer mt-3 pb-3 text-center">
+        <a href="a1.html" class="btn btn-primary">Aufgabe 1</a>
+        <a href="a2.html" class="btn btn-primary">Aufgabe 2</a>
+        <a href="a3.html" class="btn btn-primary">Aufgabe 3</a>
     </div>
 </body>
 

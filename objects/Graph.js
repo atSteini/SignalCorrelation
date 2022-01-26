@@ -88,7 +88,7 @@ class Graph {
     formatShowIndexTimeValue(timePrefix, timeSuffix, valuePrefix, valueSuffix) {
         this.dataLabels.formatter = function (value, context) {
             return (
-                `${valuePrefix} ${Graph.formatFloat(3, value)} ${valueSuffix}\n` +
+                `${valuePrefix} ${Graph.formatFloat(3, value)} ${valueSuffix}` +
                 `${timePrefix} ${Graph.formatFloat(3, context.chart.data.labels[context.dataIndex])} ${timeSuffix}`
             );
         };
@@ -103,7 +103,7 @@ class Graph {
         this.dataLabels.formatter = function (value, context) {
             let timeValue = context.chart.data.labels[context.dataIndex];
 
-            if (forceIndex && forceValue) {
+            if (forceIndex != null && forceValue != null) {
                 //TODO: Don't know if this works ;)
                 let isForcedIndex = context.dataIndex === forceIndex;
                 let curForceValue = forceValue;
