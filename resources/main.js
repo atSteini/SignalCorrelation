@@ -9,6 +9,8 @@ let student = new Student(
     19
 );
 
+let assignment;
+
 let measurement, measurement3;
 
 // Settings
@@ -104,7 +106,7 @@ function updateSettings(isCalledFromDom) {
     update();
 }
 
-function updateSettingsNoUpdate(assignment) {
+function updateSettingsNoUpdate() {
     console.clear();
 
     enableLog = getChecked('enableLog');
@@ -126,18 +128,20 @@ function updateSettingsNoUpdate(assignment) {
     checkAndPrintDefaults(assignment);
 }
 
-function update(isFirstLoad, assignment) {
+function update(isFirstLoad, assignmentNumber) {
     if (!isFirstLoad && !canClick()) {
         return;
     }
 
+    assignment = assignmentNumber;
+
     updateLoading(true);
 
-    updateSettingsNoUpdate(assignment);
+    updateSettingsNoUpdate();
 
     generateDefaults();
 
-    checkAndPrintDefaults(assignment);
+    checkAndPrintDefaults();
 
     switch (assignment) {
         case 1:
@@ -321,7 +325,7 @@ function initLineGraphFor(signal, measurement, name, divId, interpolate) {
     return graph;
 }
 
-function checkAndPrintDefaults(assignment) {
+function checkAndPrintDefaults() {
     if (!enableLog || !logDefaults) {
         return;
     }
